@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Todo List</title>
+        <style type="text/css">
+            .strike {
+                text-decoration: line-through;
+            }
+            .alert {
+                border: 1px solid;
+                padding: 3px;
+                width: 80%;
+            }
+            .alert-error {
+                background-color: #c60f13;
+                border-color: #970b0e;
+                color: white;
+            }
+            .alert-success {
+                background-color: #5da423;
+                border-color: #457a1a;
+                color: white;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:messages layout="table" styleClass="alert alert-success" rendered="#{facesContext.maximumSeverity.ordinal == 0}" />
+        <h:messages layout="table" styleClass="alert alert-error"  rendered="#{facesContext.maximumSeverity.ordinal > 0}"/>
+        <h2>Create Todo</h2>
+        <h:form>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Title: " />
+                <h:inputText value="#{todoController.todo.todoTitle}" />
+                <h:commandButton value="Create" action="#{todoController.create}" />
+            </h:panelGrid>
+        </h:form>
+
+        <h2>Todo List</h2>
+
+        <h:dataTable value="#{todoController.todoList}" var="todo">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Titile" />
+                </f:facet>
+                <h:outputText value="#{todo.todoTitle}" rendered="#{!todo.finished}" />
+                <h:outputText value="#{todo.todoTitle}" rendered="#{todo.finished}" class="strike" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Created At" />
+                </f:facet>
+                <h:outputText value="#{todo.createdAt}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Actions" />
+                </f:facet>
+                <h:form>
+                    <h:commandButton value="Done" action="#{todoController.finish(todo.todoId)}" rendered="#{!todo.finished}" />
+                    <h:commandButton value="Delete" action="#{todoController.delete(todo.todoId)}" />
+                </h:form>
+            </h:column>
+
+        </h:dataTable>
+    </h:body>
+</html>
+
