@@ -29,8 +29,8 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(todo.app.common.exception.BusinessExceptionMapper.class);
+        resources.add(todo.app.common.exception.ConstraintValidationExceptionMapper.class);
         resources.add(todo.app.common.exception.ResourceNotFoundExceptionMapper.class);
-        resources.add(todo.app.common.exception.ValidationExceptionMapper.class);
         resources.add(todo.app.todo.TodoResource.class);
     }
     

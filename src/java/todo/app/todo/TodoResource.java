@@ -3,6 +3,9 @@ package todo.app.todo;
 import java.net.URI;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.validation.Valid;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import todo.domain.model.Todo;
+import todo.domain.model.group.Create;
 import todo.domain.service.todo.TodoService;
 
 @Path("todos")
@@ -38,7 +42,7 @@ public class TodoResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response postTodos(Todo todo, @Context UriInfo uriInfo) {
+    public Response postTodos(@Valid @ConvertGroup(from = Default.class, to = Create.class) Todo todo, @Context UriInfo uriInfo) {
         Todo createdTodo = todoService.create(todo);
         Integer todoId = createdTodo.getTodoId();
         URI newUri = uriInfo.getRequestUriBuilder()
@@ -49,7 +53,7 @@ public class TodoResource {
     @PUT
     @Path("{todoId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Todo putTodos(@PathParam("todoId") Integer todoId) {
+    public Todo putTodo(@PathParam("todoId") Integer todoId) {
         Todo todo = todoService.finish(todoId);
         return todo;
     }
@@ -58,7 +62,7 @@ public class TodoResource {
     @DELETE
     @Path("{todoId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void deleteTodos(@PathParam("todoId") Integer todoId) {
+    public void deleteTodo(@PathParam("todoId") Integer todoId) {
         todoService.delete(todoId);
     }
 }
