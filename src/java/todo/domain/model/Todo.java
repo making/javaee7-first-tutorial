@@ -38,7 +38,7 @@ public class Todo implements Serializable {
     @Column(name = "TODO_ID")
     private Integer todoId;
     @Basic(optional = false)
-    @NotNull
+    @NotNull(groups = {Default.class, Create.class})
     @Size(min = 1, max = 128, groups={Default.class, Create.class})
     @Column(name = "TODO_TITLE")
     private String todoTitle;
