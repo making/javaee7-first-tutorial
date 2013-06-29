@@ -16,10 +16,6 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-/**
- *
- * @author maki
- */
 @ServerEndpoint("/todos/monitor")
 @ApplicationScoped
 public class TodoWebSocketEndPoint {
@@ -46,6 +42,11 @@ public class TodoWebSocketEndPoint {
         logger.log(Level.INFO, "{0} sessions", sessions.size());
     }
 
+    @OnError
+    public void onError(Throwable e) {
+        logger.log(Level.SEVERE, "Unexcepted Exception happened!", e);
+    }
+
     public void onMessage(@Observes @TodoEvent TodoEventModel todoEventModel) {
         for (Session s : sessions) {
             try {
@@ -54,10 +55,5 @@ public class TodoWebSocketEndPoint {
                 logger.log(Level.SEVERE, null, ex);
             }
         }
-    }
-    
-    @OnError
-    public void onError(Throwable e) {
-        logger.log(Level.SEVERE, "Unexcepted Exception happened!", e);
     }
 }
