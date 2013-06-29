@@ -1,4 +1,4 @@
-package todo.app.todo;
+package todo.domain.service.todo;
 
 import todo.domain.model.Todo;
 
@@ -10,12 +10,10 @@ public class TodoEventModel {
     }
     private final Todo todo;
     private final EventType type;
-    private final String source;
 
-    public TodoEventModel(Todo todo, EventType type, String source) {
+    public TodoEventModel(Todo todo, EventType type) {
         this.todo = todo;
         this.type = type;
-        this.source = source;
     }
 
     public Todo getTodo() {
@@ -26,14 +24,8 @@ public class TodoEventModel {
         return type;
     }
 
-    public String getSource() {
-        return source;
-    }
-
     @Override
     public String toString() {
-        return "TodoEventModel{" + "todo=" + todo + ", type=" + type + ", source=" + source + '}';
+        return "TodoEventModel{" + "todo=" + todo + ", type=" + type + "}";
     }
-    
-    
 }

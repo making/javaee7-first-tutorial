@@ -1,4 +1,4 @@
-package todo.app.todo;
+package todo.domain.service.todo;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.ElementType.FIELD;

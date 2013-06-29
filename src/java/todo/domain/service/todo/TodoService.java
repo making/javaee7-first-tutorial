@@ -3,6 +3,8 @@ package todo.domain.service.todo;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -16,6 +18,9 @@ public class TodoService {
     private static final long MAX_UNFINISHED_COUNT = 5;
     @PersistenceContext
     protected EntityManager entityManager;
+    @Inject
+    @TodoEvent
+    protected Event<TodoEventModel> todoEvent;
 
     public List<Todo> findAll() {
         TypedQuery q = entityManager.createNamedQuery("Todo.findAll", Todo.class);
@@ -42,6 +47,8 @@ public class TodoService {
         todo.setFinished(false);
         todo.setCreatedAt(new Date());
         entityManager.persist(todo);
+        entityManager.flush();
+        todoEvent.fire(new TodoEventModel(todo, TodoEventModel.EventType.CREATE));
         return todo;
     }
 
@@ -53,11 +60,13 @@ public class TodoService {
         }
         todo.setFinished(true);
         entityManager.persist(todo);
+        todoEvent.fire(new TodoEventModel(todo, TodoEventModel.EventType.UPDATE));
         return todo;
     }
 
     public void delete(Integer todoId) {
         Todo todo = findOne(todoId);
         entityManager.remove(todo);
+        todoEvent.fire(new TodoEventModel(todo, TodoEventModel.EventType.DELETE));
     }
 }

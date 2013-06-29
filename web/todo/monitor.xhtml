@@ -21,7 +21,13 @@
                     this.session = new WebSocket('ws://' + this.path);
                     var self = this;
                     this.session.onmessage = function(evt) {
-                        self.target.innerHTML = self.target.innerHTML + evt.data + '<br/>';
+                        self.target.innerHTML = new Date(evt.timeStamp) + ': ' + evt.data + '<br/>' + self.target.innerHTML;
+                    };
+                    this.session.onclose = function(evt) {
+                        self.target.innerHTML = new Date(evt.timeStamp) + ': closed<br />' + self.target.innerHTML;
+                    };
+                    this.session.onerror = function(evt) {
+                        self.target.innerHTML = new Date(evt.timeStamp) + ': execption happend!<br />' + self.target.innerHTML;
                     };
                 }
                 return false;
@@ -30,11 +36,14 @@
     </h:head>
     <h:body>
         <h1>Todo Monitor</h1>
-        <div id="result"></div>
+        <div id="result" style="border: 1px solid;height: 300px;overflow: scroll;"></div>
         <button onclick="todoMonitor.open();">Open</button>
         <button onclick="todoMonitor.close();">Close</button>
         <script>
             var todoMonitor = new TodoMonitor(document.location.host + '/todo/todos/monitor', 'result');
+            window.onunload = function() {
+                todoMonitor.close();
+            };
         </script>
     </h:body>
 </html>
