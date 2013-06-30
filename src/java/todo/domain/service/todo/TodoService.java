@@ -59,7 +59,7 @@ public class TodoService {
                     + todoId + ")");
         }
         todo.setFinished(true);
-        entityManager.persist(todo);
+        entityManager.merge(todo);
         todoEvent.fire(new TodoEventModel(todo, TodoEventModel.EventType.UPDATE));
         return todo;
     }
