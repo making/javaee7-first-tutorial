@@ -12,7 +12,7 @@ public class BusinessExceptionMapper implements ExceptionMapper<BusinessExceptio
     @Override
     public Response toResponse(BusinessException exception) {
         ErrorModel errorModel = new ErrorModel(Arrays.asList(exception.getMessage()));
-        return Response.status(Response.Status.NOT_ACCEPTABLE)
+        return Response.status(Response.Status.CONFLICT)
                 .entity(errorModel).build();
     }
 }
