@@ -1,15 +1,11 @@
 package todo.app.todo;
 
-import todo.domain.service.todo.TodoEventModel;
-import todo.domain.service.todo.TodoEvent;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnOpen;
@@ -17,10 +13,9 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint("/todos/monitor")
-@ApplicationScoped
 public class TodoWebSocketEndPoint {
 
-    private static final Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
+    static final Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
     private static final Logger logger = Logger.getLogger(TodoWebSocketEndPoint.class.getName());
 
     @OnOpen
@@ -45,15 +40,5 @@ public class TodoWebSocketEndPoint {
     @OnError
     public void onError(Throwable e) {
         logger.log(Level.SEVERE, "Unexcepted Exception happened!", e);
-    }
-
-    public void onMessage(@Observes @TodoEvent TodoEventModel todoEventModel) {
-        for (Session s : sessions) {
-            try {
-                s.getBasicRemote().sendText(todoEventModel.toString());
-            } catch (IOException ex) {
-                logger.log(Level.SEVERE, null, ex);
-            }
-        }
     }
 }
