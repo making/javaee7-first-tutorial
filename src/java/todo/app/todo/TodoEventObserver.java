@@ -12,7 +12,7 @@ import todo.domain.service.todo.TodoEventModel;
 @ApplicationScoped
 public class TodoEventObserver {
     
-    private static final Logger logger = Logger.getLogger(TodoWebSocketEndPoint.class.getName());
+    private static final Logger logger = Logger.getLogger(TodoEventObserver.class.getName());
 
     public void onEventMessage(@Observes @TodoEvent TodoEventModel todoEventModel) {
         for (Session s : TodoWebSocketEndPoint.sessions) {
